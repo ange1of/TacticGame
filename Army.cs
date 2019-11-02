@@ -2,27 +2,52 @@ using System;
 using System.Collections.Generic;
 
 namespace game {
+
     class Army {
-        public Army(List<UnitsStack> _unitsStackList) {
-            if (_unitsStackList.Count > MAXSIZE) {
-                throw new ArgumentException($"Trying to make army with more than {MAXSIZE} stacks");
+        public Army(IEnumerable<UnitsStack> _unitsStackList) {
+            foreach (UnitsStack _currentStack in _unitsStackList) {
+                if (unitsStackList.Count == MAXSIZE) {
+                    throw new ArmyOverflowException($"Trying to make army of [{string.Join(", ", _unitsStackList)}]\nArmy.MAXSIZE = {MAXSIZE}");
+                }
+                unitsStackList.Add(new UnitsStack(_currentStack));
             }
-            _unitsStackList.ForEach((item) => unitsStackList.Add(item.Copy()));
+        }
+
+        public Army(params UnitsStack[] _unitsStackList) {
+            if (_unitsStackList.Length > MAXSIZE) {
+                    throw new ArmyOverflowException($"Trying to make army of [{string.Join<UnitsStack>(", ", _unitsStackList)}]\nArmy.MAXSIZE = {MAXSIZE}");
+            }
+            foreach (UnitsStack _currentStack in _unitsStackList) {
+                unitsStackList.Add(new UnitsStack(_currentStack));
+            }
         }
 
         public Army(Army otherArmy) {
-            otherArmy.unitsStackList.ForEach((item) => unitsStackList.Add(item.Copy()));
+            otherArmy.unitsStackList.ForEach((_currentStack) => unitsStackList.Add(new UnitsStack(_currentStack)));
         }
 
-        public string PrintArmy() {
-            var armyString = "\"Army\": {\n";
-            foreach (var stack in unitsStackList) {
-                armyString += "\t" + stack.PrintStack() + ",\n";
+        public override string ToString() {
+            return "{\"unitsStackList\": [" + string.Join(",", unitsStackList) + "]}";
+        }
+
+        public void AddStack(UnitsStack newUnitsStack) {
+            if (unitsStackList.Count > MAXSIZE) {
+                throw new ArmyOverflowException($"Trying to add too many stacks to Army.\nArmy.MAXSIZE is {MAXSIZE}");
             }
-            return armyString + "}";
+            unitsStackList.Add(new UnitsStack(newUnitsStack));
         }
 
-        public readonly List<UnitsStack> unitsStackList = new List<UnitsStack>();
-        private const int MAXSIZE = 6;
+        public void RemoveStack(UnitsStack stackToRemove) {
+            unitsStackList.Remove(stackToRemove);
+        }
+        public void RemoveStack(int index) {
+            unitsStackList.RemoveAt(index);
+        }
+        public void Clear() {
+            unitsStackList.Clear();
+        }
+        
+        public List<UnitsStack> unitsStackList { get; } = new List<UnitsStack>();
+        public static readonly uint MAXSIZE = uint.Parse(Config.GetValue("Army:MAXSIZE"));
     }
 }
