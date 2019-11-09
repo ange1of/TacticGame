@@ -4,7 +4,7 @@ namespace game {
     class Angel : Unit {
         private static Angel instance;
 
-        private Angel() : base("angel", 180, 27, 27, (45, 45), 11) {}
+        private Angel() : base("Angel", 180, 27, 27, (45, 45), 11) {}
 
         public static Angel Instance {
             get {
