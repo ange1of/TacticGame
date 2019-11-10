@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace game {
 
-    abstract class Unit {
+    class Unit {
 
         protected Unit(string _type, uint _hitPoints, uint _attack, int _defence, 
         (uint minDamage, uint maxDamage) _damage, double _initiative) {

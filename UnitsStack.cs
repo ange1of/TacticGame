@@ -17,6 +17,11 @@ namespace game  {
             unitsCount = otherStack.unitsCount;
         }
 
+        public UnitsStack(BattleUnitsStack otherStack) {
+            unitsType = otherStack.unitsType;
+            unitsCount = otherStack.unitsCount;
+        }
+
         public override string ToString() {
             return $"{{\"{unitsType.type}\": {unitsCount}}}";
         }

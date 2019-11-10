@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Xiaomi\\Documents\\OOP\\Game2\\Game2.csproj": {}
+    "C:\\Users\\Xiaomi\\Documents\\OOP\\Game\\Game2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Xiaomi\\Documents\\OOP\\Game2\\Game2.csproj": {
+    "C:\\Users\\Xiaomi\\Documents\\OOP\\Game\\Game2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Xiaomi\\Documents\\OOP\\Game2\\Game2.csproj",
+        "projectUniqueName": "C:\\Users\\Xiaomi\\Documents\\OOP\\Game\\Game2.csproj",
         "projectName": "Game2",
-        "projectPath": "C:\\Users\\Xiaomi\\Documents\\OOP\\Game2\\Game2.csproj",
+        "projectPath": "C:\\Users\\Xiaomi\\Documents\\OOP\\Game\\Game2.csproj",
         "packagesPath": "C:\\Users\\Xiaomi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Xiaomi\\Documents\\OOP\\Game2\\obj\\",
+        "outputPath": "C:\\Users\\Xiaomi\\Documents\\OOP\\Game\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
