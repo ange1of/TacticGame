@@ -38,3 +38,4 @@ C:\Users\Xiaomi\Documents\OOP\Game\obj\Debug\netcoreapp3.0\Game2.AssemblyInfo.cs
 C:\Users\Xiaomi\Documents\OOP\Game\obj\Debug\netcoreapp3.0\Game2.csproj.CopyComplete
 C:\Users\Xiaomi\Documents\OOP\Game\obj\Debug\netcoreapp3.0\Game2.dll
 C:\Users\Xiaomi\Documents\OOP\Game\obj\Debug\netcoreapp3.0\Game2.pdb
+C:\Users\Xiaomi\Documents\OOP\Game\bin\Debug\netcoreapp3.0\Priority Queue.dll

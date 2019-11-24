@@ -5,7 +5,7 @@ namespace game {
 
     class Unit {
 
-        protected Unit(string _type, uint _hitPoints, uint _attack, int _defence, 
+        public Unit(string _type, uint _hitPoints, uint _attack, int _defence, 
         (uint minDamage, uint maxDamage) _damage, double _initiative) {
             type = _type;
             hitPoints = _hitPoints;

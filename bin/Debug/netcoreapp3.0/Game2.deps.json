@@ -9,7 +9,8 @@
       "Game2/1.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration": "3.0.0",
-          "Microsoft.Extensions.Configuration.Json": "3.0.0"
+          "Microsoft.Extensions.Configuration.Json": "3.0.0",
+          "OptimizedPriorityQueue": "4.2.0"
         },
         "runtime": {
           "Game2.dll": {}
@@ -99,6 +100,14 @@
             "fileVersion": "3.0.19.46305"
           }
         }
+      },
+      "OptimizedPriorityQueue/4.2.0": {
+        "runtime": {
+          "lib/netstandard1.0/Priority Queue.dll": {
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.2.0.0"
+          }
+        }
       }
     }
   },
@@ -163,6 +172,13 @@
       "sha512": "sha512-6gwewTbmOh+ZVBicVkL1XRp79sx4O7BVY6Yy+7OYZdwn3pyOKe9lOam+3gXJ3TZMjhJZdV0Ub8hxHt2vkrmN5Q==",
       "path": "microsoft.extensions.primitives/3.0.0",
       "hashPath": "microsoft.extensions.primitives.3.0.0.nupkg.sha512"
+    },
+    "OptimizedPriorityQueue/4.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/Sr/OfCFnff7zFe6HoDyWRU8pEvJbOCE9ZjFCSH0EcfETjgvZJ2kUoqlTgVR7cgTPexOGhNATdBKQigqbYn43w==",
+      "path": "optimizedpriorityqueue/4.2.0",
+      "hashPath": "optimizedpriorityqueue.4.2.0.nupkg.sha512"
     }
   }
 }

@@ -10,7 +10,9 @@ namespace game {
                 if (_unitsStackList.Count == MAXSIZE) {
                     throw new ArmyOverflowException($"Trying to make battle army of [{string.Join(", ", otherUnitsStackList)}]\nBattleArmy.MAXSIZE = {MAXSIZE}");
                 }
-                _unitsStackList.Add(new BattleUnitsStack(currentStack));
+                var newStack = new BattleUnitsStack(currentStack);
+                newStack.parentArmy = this;
+                _unitsStackList.Add(newStack);
             }
         }
 
@@ -19,12 +21,18 @@ namespace game {
                     throw new ArmyOverflowException($"Trying to make battle army of [{string.Join<BattleUnitsStack>(", ", otherUnitsStackList)}]\nBattleArmy.MAXSIZE = {MAXSIZE}");
             }
             foreach (BattleUnitsStack currentStack in otherUnitsStackList) {
-                _unitsStackList.Add(new BattleUnitsStack(currentStack));
+                var newStack = new BattleUnitsStack(currentStack);
+                newStack.parentArmy = this;
+                _unitsStackList.Add(newStack);
             }
         }
 
         public BattleArmy(BattleArmy otherArmy) {
-            otherArmy.unitsStackList.ForEach((currentStack) => _unitsStackList.Add(new BattleUnitsStack(currentStack)));
+            otherArmy.unitsStackList.ForEach((currentStack) => {
+                var newStack = new BattleUnitsStack(currentStack);
+                newStack.parentArmy = this;
+                _unitsStackList.Add(newStack);
+            });
         }
 
         public BattleArmy(IEnumerable<UnitsStack> otherUnitsStackList) {
@@ -32,7 +40,9 @@ namespace game {
                 if (_unitsStackList.Count == MAXSIZE) {
                     throw new ArmyOverflowException($"Trying to make battle army of [{string.Join(", ", otherUnitsStackList)}]\nBattleArmy.MAXSIZE = {MAXSIZE}");
                 }
-                _unitsStackList.Add(new BattleUnitsStack(currentStack));
+                var newStack = new BattleUnitsStack(currentStack);
+                newStack.parentArmy = this;
+                _unitsStackList.Add(newStack);
             }
         }
 
@@ -41,12 +51,18 @@ namespace game {
                     throw new ArmyOverflowException($"Trying to make battle army of [{string.Join<UnitsStack>(", ", otherUnitsStackList)}]\nBattleArmy.MAXSIZE = {MAXSIZE}");
             }
             foreach (UnitsStack currentStack in otherUnitsStackList) {
-                _unitsStackList.Add(new BattleUnitsStack(currentStack));
+                var newStack = new BattleUnitsStack(currentStack);
+                newStack.parentArmy = this;
+                _unitsStackList.Add(newStack);
             }
         }
 
         public BattleArmy(Army otherArmy) {
-            otherArmy.unitsStackList.ForEach((currentStack) => _unitsStackList.Add(new BattleUnitsStack(currentStack)));
+            otherArmy.unitsStackList.ForEach((currentStack) => {
+                var newStack = new BattleUnitsStack(currentStack);
+                newStack.parentArmy = this;
+                _unitsStackList.Add(newStack);
+            });
         }
 
         public override string ToString() {

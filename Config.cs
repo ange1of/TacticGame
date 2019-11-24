@@ -11,6 +11,5 @@ namespace game {
         public static string GetValue(string property) {
             return configuration.GetSection(property).Value;
         }
-
     }
 }
