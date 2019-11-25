@@ -2,7 +2,7 @@ using System;
 
 namespace game {
 
-    class Defense : IDefenseModifier {
+    class MDefense : IDefenseModifier {
         public int ModifyDefense(int baseDefence) {
             return (int)Math.Round(1.3 * baseDefence);
         }
@@ -15,15 +15,15 @@ namespace game {
             return type.ToString();
         }
 
-        private Defense() {}
-        public static Defense Instance {
+        private MDefense() {}
+        public static MDefense Instance {
             get {
                 if (instance == null) {
-                    instance = new Defense();
+                    instance = new MDefense();
                 }
                 return instance;
             }
         }
-        private static Defense instance;
+        private static MDefense instance;
     }
 }

@@ -42,7 +42,7 @@ namespace game {
 
         public static void Defend(BattleUnitsStack defendingStack) {
             defendingStack.state = State.Defending;
-            defendingStack.AddModifier(Defense.Instance, 1);
+            defendingStack.AddModifier(MDefense.Instance, 1);
         }
     }
 

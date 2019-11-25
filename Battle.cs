@@ -11,13 +11,12 @@ namespace game {
 
             firstPlayerArmy = new BattleArmy(firstPlayer.army);
             secondPlayerArmy = new BattleArmy(secondPlayer.army);
-
             intitativeScale = new Initiative(firstPlayerArmy, secondPlayerArmy);
-            roundNumber = 0;
-            winner = null;
         }
 
         public void Start() {
+            roundNumber = 0;
+            winner = null;
             while (winner == null) {
                 while (intitativeScale.NextStack() != null) {
                     Console.WriteLine(PrintScale());
@@ -177,7 +176,7 @@ namespace game {
                         int.TryParse(Console.ReadLine(), out chosenTarget);
                         while (!(chosenTarget >= 1 && chosenTarget <= index)) {
                             Console.WriteLine("Incorrect action number, try again");
-                            int.TryParse(Console.ReadLine(), out chosenAction);
+                            int.TryParse(Console.ReadLine(), out chosenTarget);
                         }
 
                         Action.Attack(stack, targets[chosenTarget-1]);
@@ -209,7 +208,7 @@ namespace game {
                         int.TryParse(Console.ReadLine(), out chosenTarget);
                         while (!(chosenTarget >= 1 && chosenTarget <= index)) {
                             Console.WriteLine("Incorrect action number, try again");
-                            int.TryParse(Console.ReadLine(), out chosenAction);
+                            int.TryParse(Console.ReadLine(), out chosenTarget);
                         }
 
                         Action.Cast(stack);

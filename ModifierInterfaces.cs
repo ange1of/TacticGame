@@ -34,5 +34,10 @@ namespace game {
 
     enum ModifierType {
         Defense,
+        Curse,
+        PunishingStrike,
+        Weakening,
+        Acceleration,
+        Resurrection
     }
 }

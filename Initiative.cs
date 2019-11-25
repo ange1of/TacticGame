@@ -9,7 +9,7 @@ namespace game {
         public Initiative(BattleArmy _firstArmy, BattleArmy _secondArmy) {
             firstArmy = _firstArmy;
             secondArmy = _secondArmy;
-            
+
             currentMainScale = new SimplePriorityQueue<BattleUnitsStack, double>();
             currentAwaitingScale = new SimplePriorityQueue<BattleUnitsStack, double>();
             nextMainScale = new SimplePriorityQueue<BattleUnitsStack, double>();
@@ -127,7 +127,7 @@ namespace game {
                 currentMainScale.Remove(stack);
             }
             else if (currentAwaitingScale.Contains(stack)) {
-                initiativeRandom = -currentMainScale.GetPriority(stack)%1;
+                initiativeRandom = -currentAwaitingScale.GetPriority(stack)%1;
                 currentAwaitingScale.Remove(stack);
             }
 
