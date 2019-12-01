@@ -5,7 +5,7 @@ namespace game {
     class Devil : Unit {
         private static Devil instance;
 
-        private Devil() : base("Devil", 180, 27, 27, (45, 45), 11, new List<BaseEffect>(){}) {}
+        private Devil() : base("Devil", 180, 27, 27, (45, 45), 11, new List<BaseEffect>(){}, new List<ICast>(){new CWeakening()}) {}
 
         public static Devil Instance {
             get {

@@ -44,9 +44,25 @@ namespace game {
             defendingStack.Damage((uint)random.Next((int)finalDamage.minDamage, (int)finalDamage.maxDamage));
         }
 
-        public static void Cast(BattleUnitsStack stack) {
-            stack.state = State.MadeMove;
-            ConsoleUI.PrintLine("CASTED AMAZING SPELL!");
+        public static void Cast(ICast cast,BattleUnitsStack caster, params BattleUnitsStack[] targets) {
+            caster.state = State.MadeMove;
+
+            caster.GetLastEffect()?.BeforeCast(cast, caster, targets);
+            foreach (var target in targets) {
+                target.GetLastEffect()?.BeforeCast(cast, caster, targets);
+            }
+
+            if (cast is ISingleCast) {
+                if (targets.Length != 1) {
+                    throw new GameException($"Invalid number of targets: {targets.Length} (Cast {cast.type})");
+                }
+                ((ISingleCast)cast).Cast(caster, targets[0]);
+            }
+
+            caster.GetLastEffect()?.AfterCast(cast, caster, targets);
+            foreach (var target in targets) {
+                target.GetLastEffect()?.AfterCast(cast, caster, targets);
+            }
         }
 
         public static void Wait(BattleUnitsStack waitingStack) {

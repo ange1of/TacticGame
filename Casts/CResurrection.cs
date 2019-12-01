@@ -2,23 +2,22 @@ using System;
 
 namespace game {
 
-    class CCurse : ISingleCast, IEnemyCast {
-        public CCurse() {}
+    class CResurrection : ISingleCast, IFriendCast {
+        public CResurrection() {}
 
         public ICast Clone() {
-            var result = new CCurse();
+            var result = new CResurrection();
             result.hasBeenCasted = hasBeenCasted;
             return result;
         }
 
         public void Cast(BattleUnitsStack caster, BattleUnitsStack target) {
             if (!hasBeenCasted) {
-                target.AddModifier(MCurse.Instance, 1);
+                target.Heal(100 * caster.unitsCount);
                 hasBeenCasted = true;
             }
         }
-
-        public CastType type { get; } = CastType.Curse;
+        public CastType type { get; } = CastType.Resurrection;
         public bool hasBeenCasted { get; private set; } = false;
     }
 

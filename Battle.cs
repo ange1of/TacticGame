@@ -51,19 +51,34 @@ namespace game {
         }
 
         private void NextTurn(BattleUnitsStack stack) {
+            List<ICast> possibleCasts = stack.Casts.Where(c => !c.hasBeenCasted).ToList();
+
             ConsoleUI.PrintLine($"Turn of {(intitativeScale.NextStack().parentArmy == firstPlayerArmy ? firstPlayer.nickname : secondPlayer.nickname)}'s {intitativeScale.NextStack().unitsType.type}");
+
+            if (possibleCasts.Count > 0) {
+                ConsoleUI.PrintLine($"({string.Join(", ", possibleCasts.Select(x => x.type))})");
+            }
 
             ConsoleUI.PrintLine("Possibe actions:");
 
             if (stack.state == State.NotMadeMove) {
+
                 ConsoleUI.PrintNumericList(1, "Attack", "Cast", "Wait", "Defend", "Surrender");
 
                 int chosenAction = ConsoleUI.GetNumericOption(1, 5);
+
+                if (possibleCasts.Count == 0) {
+                    while (chosenAction == 2) {
+                        ConsoleUI.PrintLine("No possible casts to use");
+                        chosenAction = ConsoleUI.GetNumericOption(1, 5);
+                    }
+                }
 
                 BattleArmy opponentArmy;
                 int index = 0;
                 var targets = new List<BattleUnitsStack>();
                 int chosenTarget = 0;
+                int chosenCast = 0;
                 switch (chosenAction) {
                     case 1:
                         ConsoleUI.PrintLine("Possible targets:");
@@ -92,7 +107,14 @@ namespace game {
                         Action.Attack(stack, targets[chosenTarget-1]);
                         break;
                     case 2:
-                        ConsoleUI.PrintLine("Possible targets:");
+                        index = 0;
+                        foreach (var cast in possibleCasts) {
+                            ConsoleUI.PrintLine($"{++index} - {cast.type}");
+                        }
+                        chosenCast = ConsoleUI.GetNumericOption(1, index);
+                        
+                        var concreteCast = possibleCasts[chosenCast-1];
+
                         if (stack.parentArmy == firstPlayerArmy) {
                             opponentArmy = secondPlayerArmy;
                         }
@@ -100,10 +122,16 @@ namespace game {
                             opponentArmy = firstPlayerArmy;
                         }
 
+                        BattleArmy targetArmy = opponentArmy;
+                        if (concreteCast is IFriendCast) {
+                            targetArmy = stack.parentArmy;
+                        }
+
                         index = 0;
                         targets = new List<BattleUnitsStack>();
-                        foreach (var target in opponentArmy.unitsStackList) {
-                            if (target.unitsCount > 0) {
+                        ConsoleUI.PrintLine("Possible targets:");
+                        foreach (var target in targetArmy.unitsStackList) {
+                            if ((target.unitsCount > 0 && !(concreteCast is CResurrection)) || (concreteCast is CResurrection && target.ressurectable)) {
                                 ConsoleUI.Print($"{++index} - {target} (");
                                 foreach (var mod in target.GetModifiers()) {
                                     ConsoleUI.Print($"{mod}");
@@ -116,7 +144,7 @@ namespace game {
                         ConsoleUI.PrintLine("Choose the target:");
                         chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
-                        Action.Cast(stack);
+                        Action.Cast(concreteCast, stack, targets[chosenTarget-1]);
                         break;
                     case 3:
                         Action.Wait(stack);
@@ -136,10 +164,18 @@ namespace game {
 
                 int chosenAction = ConsoleUI.GetNumericOption(1, 4);
                 
+                if (possibleCasts.Count == 0) {
+                    while (chosenAction == 2) {
+                        ConsoleUI.PrintLine("No possible casts to use");
+                        chosenAction = ConsoleUI.GetNumericOption(1, 4);
+                    }
+                }
+
                 BattleArmy opponentArmy;
                 int index = 0;
                 var targets = new List<BattleUnitsStack>();
                 int chosenTarget = 0;
+                int chosenCast = 0;
                 switch (chosenAction) {
                     case 1:
                         ConsoleUI.PrintLine("Possible targets:");
@@ -192,7 +228,7 @@ namespace game {
                         ConsoleUI.PrintLine("Choose the target:");
                         chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
-                        Action.Cast(stack);
+                        // Action.Cast(stack);
                         break;
                     case 3:
                         Action.Defend(stack);

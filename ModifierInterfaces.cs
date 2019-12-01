@@ -38,6 +38,5 @@ namespace game {
         PunishingStrike,
         Weakening,
         Acceleration,
-        Resurrection
     }
 }

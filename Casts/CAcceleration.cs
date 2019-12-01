@@ -2,23 +2,21 @@ using System;
 
 namespace game {
 
-    class CCurse : ISingleCast, IEnemyCast {
-        public CCurse() {}
+    class CAcceleration : ISingleCast, IEnemyCast {
+        public CAcceleration() {}
 
         public ICast Clone() {
-            var result = new CCurse();
+            var result = new CAcceleration();
             result.hasBeenCasted = hasBeenCasted;
             return result;
         }
-
         public void Cast(BattleUnitsStack caster, BattleUnitsStack target) {
             if (!hasBeenCasted) {
-                target.AddModifier(MCurse.Instance, 1);
+                target.AddModifier(MAcceleration.Instance, 1);
                 hasBeenCasted = true;
             }
         }
-
-        public CastType type { get; } = CastType.Curse;
+        public CastType type { get; } = CastType.Acceleration;
         public bool hasBeenCasted { get; private set; } = false;
     }
 

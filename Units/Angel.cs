@@ -5,7 +5,7 @@ namespace game {
     class Angel : Unit {
         private static Angel instance;
 
-        private Angel() : base("Angel", 180, 27, 27, (45, 45), 11, new List<BaseEffect>(){}) {}
+        private Angel() : base("Angel", 180, 27, 27, (45, 45), 11, new List<BaseEffect>(){}, new List<ICast>(){new CPunishingStrike()}) {}
 
         public static Angel Instance {
             get {

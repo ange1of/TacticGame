@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace game {
 
@@ -20,6 +21,10 @@ namespace game {
                 AddEffect(effect, double.PositiveInfinity);
             }
 
+            foreach (var cast in _unitsType.Casts) {
+                Casts.Add(cast);
+            }
+
             parentArmy = null;
         }
 
@@ -37,6 +42,9 @@ namespace game {
             foreach (BaseEffect effect in otherStack.Effects.Keys) {
                 AddEffect(effect, double.PositiveInfinity);
             }
+            foreach (var cast in otherStack.Casts) {
+                Casts.Add(cast);
+            }
             parentArmy = otherStack.parentArmy;
         }
 
@@ -51,7 +59,9 @@ namespace game {
             foreach (BaseEffect effect in otherStack.unitsType.Effects) {
                 AddEffect(effect, double.PositiveInfinity);
             }
-
+            foreach (var cast in otherStack.unitsType.Casts) {
+                Casts.Add(cast);
+            }
             parentArmy = null;
         }
 
@@ -70,7 +80,7 @@ namespace game {
         }
 
         public override string ToString() {
-            return $"{unitsType.type}: {totalHitPoints} ({(!fightedBack ? "FB" : "")})({string.Join(", ", GetEffects())})";
+            return $"{unitsType.type}: {totalHitPoints} ({(!fightedBack ? "FB" : "")})({string.Join(", ", GetEffects())})({string.Join(", ", Casts.Select(x => x.type))})";
         }
 
         public void AddModifier(IModifier modifier, double movesCount) {
@@ -193,6 +203,10 @@ namespace game {
             }
             expiredEffects.ForEach(effect => RemoveEffect(effect));
             Effects = newEffects;
+
+            foreach (BaseEffect effect in Effects.Keys) {
+                effect.NewRound();
+            }
         }
 
         public List<ModifierType> GetModifiers() {
@@ -212,11 +226,12 @@ namespace game {
 
         private OrderedDictionary Modifiers = new OrderedDictionary();
         private OrderedDictionary Effects = new OrderedDictionary();
+        public List<ICast> Casts { get; private set; } = new List<ICast>();
 
         public Unit unitsType { get; }
         public Unit metaUnit {
             get {
-                return new Unit(unitsType.type, _metaUnit.hitPoints, _metaUnit.attack, _metaUnit.defence, _metaUnit.damage, _metaUnit.initiative, new List<BaseEffect>());
+                return new Unit(unitsType.type, _metaUnit.hitPoints, _metaUnit.attack, _metaUnit.defence, _metaUnit.damage, _metaUnit.initiative, new List<BaseEffect>(), new List<ICast>());
             }
         }
         private BattleUnit _metaUnit;
