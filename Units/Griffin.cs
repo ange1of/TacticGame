@@ -5,7 +5,7 @@ namespace game {
     class Griffin : Unit {
         private static Griffin instance;
 
-        private Griffin() : base("Griffin", 30, 7, 5, (5, 10), 15, new List<BaseEffect>(){}) {}
+        private Griffin() : base("Griffin", 30, 7, 5, (5, 10), 15, new List<BaseEffect>(){new EUnlimitedResistance()}) {}
 
         public static Griffin Instance {
             get {

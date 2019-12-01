@@ -5,7 +5,7 @@ namespace game {
     class Hydra : Unit {
         private static Hydra instance;
 
-        private Hydra() : base("Hydra", 80, 15, 12, (7, 14), 7, new List<BaseEffect>(){}) {}
+        private Hydra() : base("Hydra", 80, 15, 12, (7, 14), 7, new List<BaseEffect>(){new EHitAll(), new ENoResistance()}) {}
 
         public static Hydra Instance {
             get {

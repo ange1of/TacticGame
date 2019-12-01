@@ -5,25 +5,39 @@ namespace game {
     static class Action {
         public static void Attack(BattleUnitsStack attackingStack, BattleUnitsStack defendingStack) {
             attackingStack.state = State.MadeMove;
-            AttackWithModifiers(attackingStack, defendingStack);
+
+            attackingStack.GetLastEffect()?.BeforeAttack(attackingStack, defendingStack);
+            defendingStack.GetLastEffect()?.BeforeAttack(attackingStack, defendingStack);
+            
+            PureAttack(attackingStack, defendingStack);
+
+            attackingStack.GetLastEffect()?.AfterAttack(attackingStack, defendingStack);
+            defendingStack.GetLastEffect()?.AfterAttack(attackingStack, defendingStack);
+
+            attackingStack.GetLastEffect()?.BeforeFightBack(attackingStack, defendingStack);
+            defendingStack.GetLastEffect()?.BeforeFightBack(attackingStack, defendingStack);
+
             if (!defendingStack.fightedBack) {
                 defendingStack.fightedBack = true;
-                AttackWithModifiers(defendingStack, attackingStack);
+                PureAttack(defendingStack, attackingStack);
             }
+
+            attackingStack.GetLastEffect()?.AfterFightBack(attackingStack, defendingStack);
+            defendingStack.GetLastEffect()?.AfterFightBack(attackingStack, defendingStack);
         }
 
-        private static void AttackWithModifiers(BattleUnitsStack attackingStack, BattleUnitsStack defendingStack) {
+        public static void PureAttack(BattleUnitsStack attackingStack, BattleUnitsStack defendingStack) {
             Unit attackingUnit = attackingStack.metaUnit;
             Unit defendingUnit = defendingStack.metaUnit;
             (uint minDamage, uint maxDamage) finalDamage;
             
             if (attackingUnit.attack > defendingUnit.defence) {
-                finalDamage.minDamage = (uint)Math.Round(attackingStack.unitsCount * attackingUnit.damage.minDamage * (1 + 0.05 * (attackingUnit.attack - defendingUnit.defence)));
-                finalDamage.maxDamage = (uint)Math.Round(attackingStack.unitsCount * attackingUnit.damage.maxDamage * (1 + 0.05 * (attackingUnit.attack - defendingUnit.defence)));
+                finalDamage.minDamage = (uint)Math.Ceiling(attackingStack.unitsCount * attackingUnit.damage.minDamage * (1 + 0.05 * (attackingUnit.attack - defendingUnit.defence)));
+                finalDamage.maxDamage = (uint)Math.Ceiling(attackingStack.unitsCount * attackingUnit.damage.maxDamage * (1 + 0.05 * (attackingUnit.attack - defendingUnit.defence)));
             }
             else {
-                finalDamage.minDamage = (uint)Math.Round(attackingStack.unitsCount * attackingUnit.damage.minDamage / (1 + 0.05 * (defendingUnit.defence - attackingUnit.attack)));
-                finalDamage.maxDamage = (uint)Math.Round(attackingStack.unitsCount * attackingUnit.damage.maxDamage / (1 + 0.05 * (defendingUnit.defence - attackingUnit.attack)));
+                finalDamage.minDamage = (uint)Math.Ceiling(attackingStack.unitsCount * attackingUnit.damage.minDamage / (1 + 0.05 * (defendingUnit.defence - attackingUnit.attack)));
+                finalDamage.maxDamage = (uint)Math.Ceiling(attackingStack.unitsCount * attackingUnit.damage.maxDamage / (1 + 0.05 * (defendingUnit.defence - attackingUnit.attack)));
             }
 
             var random = new Random();

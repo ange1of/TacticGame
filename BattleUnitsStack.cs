@@ -37,7 +37,7 @@ namespace game {
             foreach (BaseEffect effect in otherStack.Effects.Keys) {
                 AddEffect(effect, double.PositiveInfinity);
             }
-            parentArmy = null;
+            parentArmy = otherStack.parentArmy;
         }
 
         public BattleUnitsStack(UnitsStack otherStack) {
@@ -122,9 +122,10 @@ namespace game {
         }
 
         public void AddEffect(BaseEffect effect, double movesCount) {
+            effect = effect.Clone();
             foreach (BaseEffect existingEffect in Effects.Keys) {
-                if (effect.GetType() == existingEffect.GetType()) {
-                    Effects[existingEffect] = (double)movesCount;
+                if (effect.type == existingEffect.type) {
+                    Effects[existingEffect] = movesCount;
                     return;
                 }
             }
@@ -134,7 +135,7 @@ namespace game {
                 effect.wrappee = lastEffect;
             }
             effect.effectOwner = this;
-            Effects.Add(effect, (double)movesCount);
+            Effects.Add(effect, movesCount);
         }
 
         public void RemoveEffect(BaseEffect effect) {
@@ -162,26 +163,36 @@ namespace game {
             state = State.NotMadeMove;
             fightedBack = false;
             var expiredModifiers = new List<IModifier>();
+            var newModifiers = new OrderedDictionary();
             foreach (IModifier key in Modifiers.Keys) {
-                if ((double)Modifiers[key] == 1.0) {
-                    expiredModifiers.Add(key);
+                if ((double)Modifiers[key] == double.PositiveInfinity) {
+                    newModifiers[key] = double.PositiveInfinity;
+                }
+                else if ((double)Modifiers[key] != double.PositiveInfinity && (int)((double)Modifiers[key]) != 1){
+                    newModifiers[key] = (double)((int)((double)Modifiers[key]) - 1);
                 }
                 else {
-                    Modifiers[key] = (double)Modifiers[key] - 1;
+                    expiredModifiers.Add(key);
                 }
             }
             expiredModifiers.ForEach(mod => RemoveModifier((IModifier)mod));
+            Modifiers = newModifiers;
 
             var expiredEffects = new List<BaseEffect>();
+            var newEffects = new OrderedDictionary();
             foreach (BaseEffect key in Effects.Keys) {
-                if ((double)Effects[key] == 1.0) {
-                    expiredEffects.Add(key);
+                if ((double)Effects[key] == double.PositiveInfinity) {
+                    newEffects[key] = double.PositiveInfinity;
+                }
+                else if ((double)Effects[key] != double.PositiveInfinity && (int)((double)Effects[key]) != 1) {
+                    newEffects[key] = (double)((int)((double)Effects[key]) - 1);
                 }
                 else {
-                    Effects[key] = (double)Effects[key] - 1;
+                    expiredEffects.Add(key);
                 }
             }
-            expiredEffects.ForEach(mod => RemoveEffect((BaseEffect)mod));
+            expiredEffects.ForEach(effect => RemoveEffect(effect));
+            Effects = newEffects;
         }
 
         public List<ModifierType> GetModifiers() {
@@ -212,7 +223,6 @@ namespace game {
         
         public uint hitPoints {
             get { return _metaUnit.hitPoints; }
-            set { _metaUnit.hitPoints = value; }
         }
         public uint attack {
             get { return _metaUnit.attack; }

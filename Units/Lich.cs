@@ -5,7 +5,7 @@ namespace game {
     class Lich : Unit {
         private static Lich instance;
 
-        private Lich() : base("Lich", 50, 15, 15, (12, 17), 10, new List<BaseEffect>(){}) {}
+        private Lich() : base("Lich", 50, 15, 15, (12, 17), 10, new List<BaseEffect>(){new EUndead(), new EShooter()}) {}
 
         public static Lich Instance {
             get {

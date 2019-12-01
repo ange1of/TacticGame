@@ -2,7 +2,7 @@ using System;
 
 namespace game {
 
-    class BaseEffect {
+    abstract class BaseEffect {
 
         public BaseEffect(BaseEffect _wrappee = null, BaseEffect _wrapper = null) {
             wrappee = _wrappee;
@@ -15,34 +15,22 @@ namespace game {
             type = otherEffect.type;
         }
 
+        public abstract BaseEffect Clone();
+
         // attacker - стек, который бьет
         // target - стек, который бьют
-        public virtual void BeforeAttack(BattleUnitsStack attacker,BattleUnitsStack target) {
-            wrappee?.BeforeAttack(attacker, target);
-        }
-        public virtual void AfterAttack(BattleUnitsStack attacker,BattleUnitsStack target) {
-            wrappee?.AfterAttack(attacker, target);
-        }
+        public abstract void BeforeAttack(BattleUnitsStack attacker,BattleUnitsStack target);
+        public abstract void AfterAttack(BattleUnitsStack attacker,BattleUnitsStack target);
 
         // attacker - стек, который изначально атаковал
         // target - стек, который дает сдачу
-        public virtual void BeforeFightBack(BattleUnitsStack attacker, BattleUnitsStack target) {
-            wrappee?.BeforeFightBack(attacker, target);
-        }
-        public virtual void AfterFightBack(BattleUnitsStack attacker, BattleUnitsStack target) {
-            wrappee?.AfterFightBack(attacker, target);
-        }
+        public abstract void BeforeFightBack(BattleUnitsStack attacker, BattleUnitsStack target);
+        public abstract void AfterFightBack(BattleUnitsStack attacker, BattleUnitsStack target);
 
-        public virtual void BeforeCast(ICast cast, BattleUnitsStack caster, params BattleUnitsStack[] targets) {
-            wrappee?.BeforeCast(cast, caster, targets);
-        }
-        public virtual void AfterCast(ICast cast, BattleUnitsStack caster, params BattleUnitsStack[] targets) {
-            wrappee?.AfterCast(cast, caster, targets);
-        }
+        public abstract void BeforeCast(ICast cast, BattleUnitsStack caster, params BattleUnitsStack[] targets);
+        public abstract void AfterCast(ICast cast, BattleUnitsStack caster, params BattleUnitsStack[] targets);
 
-        public virtual void NewRound(BattleUnitsStack parentStack) {
-            wrappee?.NewRound(parentStack);
-        }
+        public abstract void NewRound();
 
         public BaseEffect wrappee;
         public BaseEffect wrapper;
@@ -55,7 +43,8 @@ namespace game {
         NoResistance,
         Shooter,
         Undead,
-        UnlimitedResistance
+        UnlimitedResistance,
+        HitAll
     }
 
 }

@@ -18,7 +18,7 @@ namespace game {
 
             initiative = _initiative;
 
-            _Effects = _effects.Select(x => new BaseEffect(x)).ToImmutableList();
+            _Effects = _effects.Select(x => x.Clone()).ToImmutableList();
         }
 
         public override string ToString() {
@@ -33,7 +33,7 @@ namespace game {
         public double initiative { get; }
         public List<BaseEffect> Effects {
             get {
-                return _Effects.Select(x => new BaseEffect(x)).ToList();
+                return _Effects.Select(x => x.Clone()).ToList();
             }
         }
         private ImmutableList<BaseEffect> _Effects;
