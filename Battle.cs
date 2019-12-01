@@ -18,8 +18,18 @@ namespace game {
             roundNumber = 0;
             winner = null;
             while (winner == null) {
+                ConsoleUI.PrintLine($"ROUND {++roundNumber}");
                 while (intitativeScale.NextStack() != null) {
-                    Console.WriteLine(PrintScale());
+                    ConsoleUI.PrintLine($"{firstPlayer.nickname}'s army:");
+                    ConsoleUI.PrintList("\t", firstPlayerArmy.unitsStackList);
+                    
+                    ConsoleUI.Print("\n");
+
+                    ConsoleUI.PrintLine($"{secondPlayer.nickname}'s army:");
+                    ConsoleUI.PrintList("\t", secondPlayerArmy.unitsStackList);
+
+                    ConsoleUI.Print("\n");
+                    ConsoleUI.PrintBlock(PrintScale());
 
                     NextTurn(intitativeScale.NextStack());
                     if (winner != null) {
@@ -33,7 +43,6 @@ namespace game {
 
         private void NewRound() {
             roundNumber++;
-            Console.WriteLine($"Round {roundNumber}");
             foreach (var stack in firstPlayerArmy.unitsStackList.Concat(secondPlayerArmy.unitsStackList)) {
                 stack.NewRound();
             }
@@ -41,19 +50,14 @@ namespace game {
         }
 
         private void NextTurn(BattleUnitsStack stack) {
+            ConsoleUI.PrintLine($"Turn of {(intitativeScale.NextStack().parentArmy == firstPlayerArmy ? firstPlayer.nickname : secondPlayer.nickname)}'s {intitativeScale.NextStack().unitsType.type}");
 
-            Console.WriteLine($"Turn of {(stack.parentArmy == firstPlayerArmy ? firstPlayer.nickname : secondPlayer.nickname)}'s {stack.unitsType.type}");
-            Console.WriteLine("Possibe actions:");
+            ConsoleUI.PrintLine("Possibe actions:");
 
             if (stack.state == State.NotMadeMove) {
-                Console.WriteLine($"1 - Attack\n2 - Cast\n3 - Wait\n4 - Defend\n5 - Surrender");
+                ConsoleUI.PrintNumericList(1, "Attack", "Cast", "Wait", "Defend", "Surrender");
 
-                int chosenAction = 0;
-                int.TryParse(Console.ReadLine(), out chosenAction);
-                while (!(chosenAction >= 1 && chosenAction <= 5)) {
-                    Console.WriteLine("Incorrect action number, try again");
-                    int.TryParse(Console.ReadLine(), out chosenAction);
-                }
+                int chosenAction = ConsoleUI.GetNumericOption(1, 5);
 
                 BattleArmy opponentArmy;
                 int index = 0;
@@ -61,7 +65,7 @@ namespace game {
                 int chosenTarget = 0;
                 switch (chosenAction) {
                     case 1:
-                        Console.WriteLine("Possible targets:");
+                        ConsoleUI.PrintLine("Possible targets:");
                         if (stack.parentArmy == firstPlayerArmy) {
                             opponentArmy = secondPlayerArmy;
                         }
@@ -72,27 +76,22 @@ namespace game {
                         targets = new List<BattleUnitsStack>();
                         foreach (var target in opponentArmy.unitsStackList) {
                             if (target.unitsCount > 0) {
-                                Console.Write($"{++index} - {target} (");
-                                foreach (var mod in target.Modifiers.Keys) {
-                                    Console.Write($"{(IModifier)mod}");
+                                ConsoleUI.Print($"{++index} - {target} (");
+                                foreach (var mod in target.GetModifiers()) {
+                                    ConsoleUI.Print($"{mod}");
                                 }
-                                Console.WriteLine(")");
+                                ConsoleUI.PrintLine(")");
                                 targets.Add(target);
                             }
                         }
 
-                        Console.WriteLine("Choose the target:");
-                        chosenTarget = 0;
-                        int.TryParse(Console.ReadLine(), out chosenTarget);
-                        while (!(chosenTarget >= 1 && chosenTarget <= index)) {
-                            Console.WriteLine("Incorrect action number, try again");
-                            int.TryParse(Console.ReadLine(), out chosenAction);
-                        }
+                        ConsoleUI.PrintLine("Choose the target:");
+                        chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
                         Action.Attack(stack, targets[chosenTarget-1]);
                         break;
                     case 2:
-                        Console.WriteLine("Possible targets:");
+                        ConsoleUI.PrintLine("Possible targets:");
                         if (stack.parentArmy == firstPlayerArmy) {
                             opponentArmy = secondPlayerArmy;
                         }
@@ -104,22 +103,17 @@ namespace game {
                         targets = new List<BattleUnitsStack>();
                         foreach (var target in opponentArmy.unitsStackList) {
                             if (target.unitsCount > 0) {
-                                Console.Write($"{++index} - {target} (");
-                                foreach (var mod in target.Modifiers.Keys) {
-                                    Console.Write($"{(IModifier)mod}");
+                                ConsoleUI.Print($"{++index} - {target} (");
+                                foreach (var mod in target.GetModifiers()) {
+                                    ConsoleUI.Print($"{mod}");
                                 }
-                                Console.WriteLine(")");
+                                ConsoleUI.PrintLine(")");
                                 targets.Add(target);
                             }
                         }
 
-                        Console.WriteLine("Choose the target:");
-                        chosenTarget = 0;
-                        int.TryParse(Console.ReadLine(), out chosenTarget);
-                        while (!(chosenTarget >= 1 && chosenTarget <= index)) {
-                            Console.WriteLine("Incorrect action number, try again");
-                            int.TryParse(Console.ReadLine(), out chosenAction);
-                        }
+                        ConsoleUI.PrintLine("Choose the target:");
+                        chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
                         Action.Cast(stack);
                         break;
@@ -137,21 +131,17 @@ namespace game {
                 }
             }
             else if (stack.state == State.Awaiting) {
-                Console.WriteLine($"1 - Attack\n2 - Cast\n3 - Defend\n4 - Surrender");
+                ConsoleUI.PrintNumericList(1, "Attack", "Cast", "Defend", "Surrender");
 
-                int chosenAction = 0;
-                int.TryParse(Console.ReadLine(), out chosenAction);
-                while (!(chosenAction == 1 || chosenAction == 2 || chosenAction == 3 || chosenAction == 4)) {
-                    Console.WriteLine("Incorrect action number, try again");
-                    int.TryParse(Console.ReadLine(), out chosenAction);
-                }
-                                BattleArmy opponentArmy;
+                int chosenAction = ConsoleUI.GetNumericOption(1, 4);
+                
+                BattleArmy opponentArmy;
                 int index = 0;
                 var targets = new List<BattleUnitsStack>();
                 int chosenTarget = 0;
                 switch (chosenAction) {
                     case 1:
-                        Console.WriteLine("Possible targets:");
+                        ConsoleUI.PrintLine("Possible targets:");
                         if (stack.parentArmy == firstPlayerArmy) {
                             opponentArmy = secondPlayerArmy;
                         }
@@ -162,27 +152,22 @@ namespace game {
                         targets = new List<BattleUnitsStack>();
                         foreach (var target in opponentArmy.unitsStackList) {
                             if (target.unitsCount > 0) {
-                                Console.Write($"{++index} - {target} (");
-                                foreach (var mod in target.Modifiers.Keys) {
-                                    Console.Write($"{(IModifier)mod}");
+                                ConsoleUI.Print($"{++index} - {target} (");
+                                foreach (var mod in target.GetModifiers()) {
+                                    ConsoleUI.Print($"{mod}");
                                 }
-                                Console.WriteLine(")");
+                                ConsoleUI.PrintLine(")");
                                 targets.Add(target);
                             }
                         }
 
-                        Console.WriteLine("Choose the target:");
-                        chosenTarget = 0;
-                        int.TryParse(Console.ReadLine(), out chosenTarget);
-                        while (!(chosenTarget >= 1 && chosenTarget <= index)) {
-                            Console.WriteLine("Incorrect action number, try again");
-                            int.TryParse(Console.ReadLine(), out chosenTarget);
-                        }
+                        ConsoleUI.PrintLine("Choose the target:");
+                        chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
                         Action.Attack(stack, targets[chosenTarget-1]);
                         break;
                     case 2:
-                        Console.WriteLine("Possible targets:");
+                        ConsoleUI.PrintLine("Possible targets:");
                         if (stack.parentArmy == firstPlayerArmy) {
                             opponentArmy = secondPlayerArmy;
                         }
@@ -194,22 +179,17 @@ namespace game {
                         targets = new List<BattleUnitsStack>();
                         foreach (var target in opponentArmy.unitsStackList) {
                             if (target.unitsCount > 0) {
-                                Console.Write($"{++index} - {target} (");
-                                foreach (var mod in target.Modifiers.Keys) {
-                                    Console.Write($"{(IModifier)mod}");
+                                ConsoleUI.Print($"{++index} - {target} (");
+                                foreach (var mod in target.GetModifiers()) {
+                                    ConsoleUI.Print($"{mod}");
                                 }
-                                Console.WriteLine(")");
+                                ConsoleUI.PrintLine(")");
                                 targets.Add(target);
                             }
                         }
 
-                        Console.WriteLine("Choose the target:");
-                        chosenTarget = 0;
-                        int.TryParse(Console.ReadLine(), out chosenTarget);
-                        while (!(chosenTarget >= 1 && chosenTarget <= index)) {
-                            Console.WriteLine("Incorrect action number, try again");
-                            int.TryParse(Console.ReadLine(), out chosenTarget);
-                        }
+                        ConsoleUI.PrintLine("Choose the target:");
+                        chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
                         Action.Cast(stack);
                         break;
@@ -247,12 +227,12 @@ namespace game {
 
         private void End() {
             if (winner == firstPlayerArmy) {
-                Console.WriteLine($"Player {firstPlayer.nickname} WINS!");
+                ConsoleUI.PrintLine($"Player {firstPlayer.nickname} WINS!");
             }
             else {
-                Console.WriteLine($"Player {secondPlayer.nickname} WINS!");
+                ConsoleUI.PrintLine($"Player {secondPlayer.nickname} WINS!");
             }
-            Console.WriteLine($"Armies:\n" +
+            ConsoleUI.PrintLine($"Armies:\n" +
             $"{firstPlayer.nickname}: {string.Join(", ", firstPlayerArmy.unitsStackList.Where(x => x.unitsCount != 0))}" + "\n" + 
             $"{secondPlayer.nickname}: {string.Join(", ", secondPlayerArmy.unitsStackList.Where(x => x.unitsCount != 0))}"
             );

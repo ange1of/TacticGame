@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace game {
     class Shaman : Unit {
         private static Shaman instance;
 
-        private Shaman() : base("Shaman", 40, 12, 10, (7, 12), 10.5) {}
+        private Shaman() : base("Shaman", 40, 12, 10, (7, 12), 10.5, new List<BaseEffect>(){}) {}
 
         public static Shaman Instance {
             get {

@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace game {
     class Crossbowman : Unit {
         private static Crossbowman instance;
 
-        private Crossbowman() : base("Crossbowman", 10, 4, 4, (2, 8), 8) {}
+        private Crossbowman() : base("Crossbowman", 10, 4, 4, (2, 8), 8, new List<BaseEffect>(){new EShooter(), new ECleanShot()}) {}
 
         public static Crossbowman Instance {
             get {

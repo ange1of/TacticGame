@@ -2,7 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.Collections.Generic;
 
-namespace game  {
+namespace game {
 
     class BattleUnitsStack {
         public BattleUnitsStack(Unit _unitsType, uint _unitsCount) {
@@ -15,7 +15,11 @@ namespace game  {
             fightedBack = false;
             initHitPoints = totalHitPoints;
             _metaUnit = new BattleUnit(_unitsType);
-            Modifiers = new OrderedDictionary();
+
+            foreach (var effect in _unitsType.Effects) {
+                AddEffect(effect, double.PositiveInfinity);
+            }
+
             parentArmy = null;
         }
 
@@ -26,9 +30,12 @@ namespace game  {
             fightedBack = otherStack.fightedBack;
             initHitPoints = otherStack.initHitPoints;
             _metaUnit = new BattleUnit(otherStack.metaUnit);
-            Modifiers = new OrderedDictionary();
+
             foreach (IModifier mod in otherStack.Modifiers.Keys) {
                 Modifiers.Add(mod, (double)otherStack.Modifiers[mod]);
+            }
+            foreach (BaseEffect effect in otherStack.Effects.Keys) {
+                AddEffect(effect, double.PositiveInfinity);
             }
             parentArmy = null;
         }
@@ -40,29 +47,33 @@ namespace game  {
             fightedBack = false;
             initHitPoints = totalHitPoints;
             _metaUnit = new BattleUnit(otherStack.unitsType);
-            Modifiers = new OrderedDictionary();
+
+            foreach (BaseEffect effect in otherStack.unitsType.Effects) {
+                AddEffect(effect, double.PositiveInfinity);
+            }
+
             parentArmy = null;
         }
 
         public uint Damage(uint damageHP) {
             uint oldHP = totalHitPoints;
             totalHitPoints = ((int)totalHitPoints-(int)damageHP > 0) ? (totalHitPoints - damageHP) : 0;
-            Console.WriteLine($"{unitsType.type} got {oldHP-totalHitPoints} damage");
+            ConsoleUI.PrintLine($"{unitsType.type} got {oldHP-totalHitPoints} damage");
             return oldHP-totalHitPoints;
         }
 
         public uint Heal(uint healHP) {
             uint oldHP = totalHitPoints;
             totalHitPoints = (totalHitPoints + healHP < initHitPoints) ? totalHitPoints + healHP : initHitPoints;
-            Console.WriteLine($"{unitsType.type} healed {oldHP-totalHitPoints} hp");
+            ConsoleUI.PrintLine($"{unitsType.type} healed {oldHP-totalHitPoints} hp");
             return totalHitPoints - oldHP;
         }
 
         public override string ToString() {
-            return $"{{\"{unitsType.type}\": {totalHitPoints}}}";
+            return $"{unitsType.type}: {totalHitPoints} ({(!fightedBack ? "FB" : "")})({string.Join(", ", GetEffects())})";
         }
 
-        public void AddModifier(IModifier modifier, int movesCount) {
+        public void AddModifier(IModifier modifier, double movesCount) {
             if (Modifiers.Contains(modifier)) {
                 Modifiers[modifier] = (double)movesCount;
             }
@@ -88,7 +99,6 @@ namespace game  {
                 }
             }
         }
-
         public void RemoveModifier(IModifier modifier) {
             if (modifier is IDamageModifier) {
                 _metaUnit.damage = ((IDamageModifier)modifier).UnmodifyDamage(_metaUnit.damage);
@@ -111,6 +121,43 @@ namespace game  {
             Modifiers.Remove(modifier);
         }
 
+        public void AddEffect(BaseEffect effect, double movesCount) {
+            foreach (BaseEffect existingEffect in Effects.Keys) {
+                if (effect.GetType() == existingEffect.GetType()) {
+                    Effects[existingEffect] = (double)movesCount;
+                    return;
+                }
+            }
+            if (Effects.Count > 0) {
+                var lastEffect = GetLastEffect();
+                lastEffect.wrapper = effect;
+                effect.wrappee = lastEffect;
+            }
+            effect.effectOwner = this;
+            Effects.Add(effect, (double)movesCount);
+        }
+
+        public void RemoveEffect(BaseEffect effect) {
+            var wrappee = effect.wrappee;
+            var wrapper = effect.wrapper;
+
+            if (wrappee != null) {
+                wrappee.wrapper = effect.wrapper;
+            }
+            if (wrapper != null) {
+                wrapper.wrappee = effect.wrappee;
+            }
+            Effects.Remove(effect);
+        }
+
+        public BaseEffect GetLastEffect() {
+            BaseEffect result = null;
+            foreach (BaseEffect key in Effects.Keys) {
+                result = key;
+            }
+            return result;
+        }
+
         public void NewRound() {
             state = State.NotMadeMove;
             fightedBack = false;
@@ -124,17 +171,66 @@ namespace game  {
                 }
             }
             expiredModifiers.ForEach(mod => RemoveModifier((IModifier)mod));
+
+            var expiredEffects = new List<BaseEffect>();
+            foreach (BaseEffect key in Effects.Keys) {
+                if ((double)Effects[key] == 1.0) {
+                    expiredEffects.Add(key);
+                }
+                else {
+                    Effects[key] = (double)Effects[key] - 1;
+                }
+            }
+            expiredEffects.ForEach(mod => RemoveEffect((BaseEffect)mod));
         }
 
-        public OrderedDictionary Modifiers { get; private set; } = new OrderedDictionary();
+        public List<ModifierType> GetModifiers() {
+            var result = new List<ModifierType>();
+            foreach (var mod in Modifiers.Keys) {
+                result.Add(((IModifier)mod).type);
+            }
+            return result;
+        }
+        public List<EffectType> GetEffects() {
+            var result = new List<EffectType>();
+            foreach (var mod in Effects.Keys) {
+                result.Add(((BaseEffect)mod).type);
+            }
+            return result;
+        }
+
+        private OrderedDictionary Modifiers = new OrderedDictionary();
+        private OrderedDictionary Effects = new OrderedDictionary();
 
         public Unit unitsType { get; }
         public Unit metaUnit {
             get {
-                return new Unit(unitsType.type, _metaUnit.hitPoints, _metaUnit.attack, _metaUnit.defence, _metaUnit.damage, _metaUnit.initiative);
+                return new Unit(unitsType.type, _metaUnit.hitPoints, _metaUnit.attack, _metaUnit.defence, _metaUnit.damage, _metaUnit.initiative, new List<BaseEffect>());
             }
         }
         private BattleUnit _metaUnit;
+        
+        public uint hitPoints {
+            get { return _metaUnit.hitPoints; }
+            set { _metaUnit.hitPoints = value; }
+        }
+        public uint attack {
+            get { return _metaUnit.attack; }
+            set { _metaUnit.attack = value; }
+        }
+        public int defence {
+            get { return _metaUnit.defence; }
+            set { _metaUnit.defence = value; }
+        }
+        public (uint minDamage, uint maxDamage) damage {
+            get { return _metaUnit.damage; }
+            set { _metaUnit.damage = value; }
+        }
+        public double initiative {
+            get { return _metaUnit.initiative; }
+            set { _metaUnit.initiative = value; }
+        }
+
         public uint unitsCount {
             get {
                 return (uint)Math.Ceiling((double)totalHitPoints/_metaUnit.hitPoints);
@@ -142,7 +238,10 @@ namespace game  {
         }
         public bool fightedBack { get; set; }
         public State state { get; set; }
+        public bool ressurectable { get; set; } = false;
+
         public BattleArmy parentArmy { get; set; }
+
         public uint initHitPoints { get; private set; }
         public uint totalHitPoints { get; private set; }
         public static readonly uint MAXSIZE = uint.Parse(Config.GetValue("BattleUnitsStack:MAXSIZE"));

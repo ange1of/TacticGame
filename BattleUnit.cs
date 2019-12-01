@@ -10,8 +10,18 @@ namespace game {
             hitPoints = _baseUnit.hitPoints;
             attack = _baseUnit.attack;
             defence = _baseUnit.defence;
+
             damage = (_baseUnit.damage.minDamage > _baseUnit.damage.maxDamage) ? (_baseUnit.damage.maxDamage, _baseUnit.damage.minDamage) : _baseUnit.damage;
             initiative = _baseUnit.initiative;
+        }
+
+        public BattleUnit(BattleUnit otherUnit) {
+            baseUnit = otherUnit.baseUnit;
+            hitPoints = otherUnit.hitPoints;
+            attack = otherUnit.attack;
+            defence = otherUnit.defence;
+            damage = otherUnit.damage;
+            initiative = otherUnit.initiative;
         }
 
         public override string ToString() {

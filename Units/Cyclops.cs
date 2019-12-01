@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace game {
     class Cyclops : Unit {
         private static Cyclops instance;
 
-        private Cyclops() : base("Cyclops", 85, 20, 15, (18, 26), 10) {}
+        private Cyclops() : base("Cyclops", 85, 20, 15, (18, 26), 10, new List<BaseEffect>(){new EShooter()}) {}
 
         public static Cyclops Instance {
             get {

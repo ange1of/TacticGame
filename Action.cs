@@ -5,7 +5,6 @@ namespace game {
     static class Action {
         public static void Attack(BattleUnitsStack attackingStack, BattleUnitsStack defendingStack) {
             attackingStack.state = State.MadeMove;
-
             AttackWithModifiers(attackingStack, defendingStack);
             if (!defendingStack.fightedBack) {
                 defendingStack.fightedBack = true;
@@ -33,7 +32,7 @@ namespace game {
 
         public static void Cast(BattleUnitsStack stack) {
             stack.state = State.MadeMove;
-            Console.WriteLine("CASTED AMAZING SPELL!");
+            ConsoleUI.PrintLine("CASTED AMAZING SPELL!");
         }
 
         public static void Wait(BattleUnitsStack waitingStack) {
