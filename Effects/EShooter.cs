@@ -26,6 +26,9 @@ namespace game {
             target.fightedBack = targetFB;
         }
 
+        public override void Init(){
+            wrappee?.Init();
+        }
         public override void BeforeAttack(BattleUnitsStack attacker,BattleUnitsStack target) {
             wrappee?.BeforeAttack(attacker, target);
         }

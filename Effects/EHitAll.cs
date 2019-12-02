@@ -43,6 +43,9 @@ namespace game {
             }
         }
 
+        public override void Init(){
+            wrappee?.Init();
+        }
         public override void BeforeAttack(BattleUnitsStack attacker,BattleUnitsStack target) {
             wrappee?.BeforeAttack(attacker, target);
         }

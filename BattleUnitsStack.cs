@@ -20,7 +20,7 @@ namespace game {
             foreach (var effect in _unitsType.Effects) {
                 AddEffect(effect, double.PositiveInfinity);
             }
-
+            GetLastEffect()?.Init();
             foreach (var cast in _unitsType.Casts) {
                 Casts.Add(cast);
             }
@@ -42,6 +42,8 @@ namespace game {
             foreach (BaseEffect effect in otherStack.Effects.Keys) {
                 AddEffect(effect, double.PositiveInfinity);
             }
+            GetLastEffect()?.Init();
+
             foreach (var cast in otherStack.Casts) {
                 Casts.Add(cast);
             }
@@ -59,6 +61,7 @@ namespace game {
             foreach (BaseEffect effect in otherStack.unitsType.Effects) {
                 AddEffect(effect, double.PositiveInfinity);
             }
+            GetLastEffect()?.Init();
             foreach (var cast in otherStack.unitsType.Casts) {
                 Casts.Add(cast);
             }
@@ -80,7 +83,7 @@ namespace game {
         }
 
         public override string ToString() {
-            return $"{unitsType.type}: {totalHitPoints} ({(!fightedBack ? "FB" : "")})({string.Join(", ", GetEffects())})({string.Join(", ", Casts.Select(x => x.type))})";
+            return $"{unitsType.type}: {totalHitPoints} ({(!fightedBack ? "FB" : "")}) E({string.Join(", ", GetEffects())}) C({string.Join(", ", Casts.Select(x => x.type))}) M({string.Join(", ", GetModifiers())})";
         }
 
         public void AddModifier(IModifier modifier, double movesCount) {
@@ -204,9 +207,7 @@ namespace game {
             expiredEffects.ForEach(effect => RemoveEffect(effect));
             Effects = newEffects;
 
-            foreach (BaseEffect effect in Effects.Keys) {
-                effect.NewRound();
-            }
+            GetLastEffect()?.NewRound();
         }
 
         public List<ModifierType> GetModifiers() {

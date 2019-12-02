@@ -2,7 +2,7 @@ using System;
 
 namespace game {
 
-    class CAcceleration : ISingleCast, IEnemyCast {
+    class CAcceleration : ISingleCast, IFriendCast {
         public CAcceleration() {}
 
         public ICast Clone() {

@@ -92,11 +92,7 @@ namespace game {
                         targets = new List<BattleUnitsStack>();
                         foreach (var target in opponentArmy.unitsStackList) {
                             if (target.unitsCount > 0) {
-                                ConsoleUI.Print($"{++index} - {target} (");
-                                foreach (var mod in target.GetModifiers()) {
-                                    ConsoleUI.Print($"{mod}");
-                                }
-                                ConsoleUI.PrintLine(")");
+                                ConsoleUI.PrintLine($"{++index} - {target}");
                                 targets.Add(target);
                             }
                         }
@@ -132,11 +128,7 @@ namespace game {
                         ConsoleUI.PrintLine("Possible targets:");
                         foreach (var target in targetArmy.unitsStackList) {
                             if ((target.unitsCount > 0 && !(concreteCast is CResurrection)) || (concreteCast is CResurrection && target.ressurectable)) {
-                                ConsoleUI.Print($"{++index} - {target} (");
-                                foreach (var mod in target.GetModifiers()) {
-                                    ConsoleUI.Print($"{mod}");
-                                }
-                                ConsoleUI.PrintLine(")");
+                                ConsoleUI.PrintLine($"{++index} - {target}");
                                 targets.Add(target);
                             }
                         }
@@ -189,11 +181,7 @@ namespace game {
                         targets = new List<BattleUnitsStack>();
                         foreach (var target in opponentArmy.unitsStackList) {
                             if (target.unitsCount > 0) {
-                                ConsoleUI.Print($"{++index} - {target} (");
-                                foreach (var mod in target.GetModifiers()) {
-                                    ConsoleUI.Print($"{mod}");
-                                }
-                                ConsoleUI.PrintLine(")");
+                                ConsoleUI.PrintLine($"{++index} - {target}");
                                 targets.Add(target);
                             }
                         }
@@ -204,7 +192,14 @@ namespace game {
                         Action.Attack(stack, targets[chosenTarget-1]);
                         break;
                     case 2:
-                        ConsoleUI.PrintLine("Possible targets:");
+                        index = 0;
+                        foreach (var cast in possibleCasts) {
+                            ConsoleUI.PrintLine($"{++index} - {cast.type}");
+                        }
+                        chosenCast = ConsoleUI.GetNumericOption(1, index);
+                        
+                        var concreteCast = possibleCasts[chosenCast-1];
+
                         if (stack.parentArmy == firstPlayerArmy) {
                             opponentArmy = secondPlayerArmy;
                         }
@@ -212,15 +207,17 @@ namespace game {
                             opponentArmy = firstPlayerArmy;
                         }
 
+                        BattleArmy targetArmy = opponentArmy;
+                        if (concreteCast is IFriendCast) {
+                            targetArmy = stack.parentArmy;
+                        }
+
                         index = 0;
                         targets = new List<BattleUnitsStack>();
-                        foreach (var target in opponentArmy.unitsStackList) {
-                            if (target.unitsCount > 0) {
-                                ConsoleUI.Print($"{++index} - {target} (");
-                                foreach (var mod in target.GetModifiers()) {
-                                    ConsoleUI.Print($"{mod}");
-                                }
-                                ConsoleUI.PrintLine(")");
+                        ConsoleUI.PrintLine("Possible targets:");
+                        foreach (var target in targetArmy.unitsStackList) {
+                            if ((target.unitsCount > 0 && !(concreteCast is CResurrection)) || (concreteCast is CResurrection && target.ressurectable)) {
+                                ConsoleUI.PrintLine($"{++index} - {target}");
                                 targets.Add(target);
                             }
                         }
@@ -228,7 +225,7 @@ namespace game {
                         ConsoleUI.PrintLine("Choose the target:");
                         chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
-                        // Action.Cast(stack);
+                        Action.Cast(concreteCast, stack, targets[chosenTarget-1]);
                         break;
                     case 3:
                         Action.Defend(stack);
@@ -270,9 +267,8 @@ namespace game {
                 ConsoleUI.PrintLine($"Player {secondPlayer.nickname} WINS!");
             }
             ConsoleUI.PrintLine($"Armies:\n" +
-            $"{firstPlayer.nickname}: {string.Join(", ", firstPlayerArmy.unitsStackList.Where(x => x.unitsCount != 0))}" + "\n" + 
-            $"{secondPlayer.nickname}: {string.Join(", ", secondPlayerArmy.unitsStackList.Where(x => x.unitsCount != 0))}"
-            );
+            $"{firstPlayer.nickname}: {string.Join(", ", firstPlayerArmy.unitsStackList)}" + "\n" + 
+            $"{secondPlayer.nickname}: {string.Join(", ", secondPlayerArmy.unitsStackList)}");
 
             firstPlayer.UpdateArmy(firstPlayerArmy);
             secondPlayer.UpdateArmy(secondPlayerArmy);
@@ -280,11 +276,11 @@ namespace game {
 
         private string PrintScale() {
             string result = "Scale: ";
-            intitativeScale.GetMainScale().ForEach(x => result += $"{x.Item1}({x.Item2}) ");
+            intitativeScale.GetMainScale().ForEach(x => result += $"({(x.Item1.parentArmy == firstPlayerArmy ? firstPlayer.nickname : secondPlayer.nickname)}){x.Item1.unitsType.type}({x.Item2}) ");
             result += "| ";
-            intitativeScale.GetAwaitingScale().ForEach(x => result += $"{x.Item1}({x.Item2}) ");
+            intitativeScale.GetAwaitingScale().ForEach(x => result += $"({(x.Item1.parentArmy == firstPlayerArmy ? firstPlayer.nickname : secondPlayer.nickname)}){x.Item1.unitsType.type}({x.Item2}) ");
             result += " |  ";
-            intitativeScale.GetNextScale().ForEach(x => result += $"{x.Item1}({x.Item2}) ");
+            intitativeScale.GetNextScale().ForEach(x => result += $"({(x.Item1.parentArmy == firstPlayerArmy ? firstPlayer.nickname : secondPlayer.nickname)}){x.Item1.unitsType.type}({x.Item2}) ");
             return result;
         }
 

@@ -17,6 +17,8 @@ namespace game {
 
         public abstract BaseEffect Clone();
 
+        public abstract void Init();
+
         // attacker - стек, который бьет
         // target - стек, который бьют
         public abstract void BeforeAttack(BattleUnitsStack attacker,BattleUnitsStack target);
