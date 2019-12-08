@@ -1,5 +1,5 @@
 namespace game {
-    enum State {
+    public enum State {
         MadeMove,
         Awaiting,
         NotMadeMove,

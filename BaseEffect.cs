@@ -2,7 +2,7 @@ using System;
 
 namespace game {
 
-    abstract class BaseEffect {
+    public abstract class BaseEffect {
 
         public BaseEffect(BaseEffect _wrappee = null, BaseEffect _wrapper = null) {
             wrappee = _wrappee;
@@ -37,17 +37,17 @@ namespace game {
         public BaseEffect wrappee;
         public BaseEffect wrapper;
         public BattleUnitsStack effectOwner;
-        public EffectType type { get; protected set; }
+        public string type { get; protected set; }
     }
 
-    enum EffectType {
-        CleanShot,
-        NoResistance,
-        Shooter,
-        Undead,
-        UnlimitedResistance,
-        HitAll
-    }
+    // enum EffectType {
+    //     CleanShot,
+    //     NoResistance,
+    //     Shooter,
+    //     Undead,
+    //     UnlimitedResistance,
+    //     HitAll
+    // }
 
 }
 

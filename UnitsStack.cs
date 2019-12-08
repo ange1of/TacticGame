@@ -2,7 +2,7 @@ using System;
 
 namespace game  {
 
-    class UnitsStack {
+    public class UnitsStack {
         public UnitsStack(Unit _unitsType, uint _unitsCount) {
             unitsType = _unitsType;
 

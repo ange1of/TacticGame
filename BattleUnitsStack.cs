@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace game {
 
-    class BattleUnitsStack {
+    public class BattleUnitsStack {
         public BattleUnitsStack(Unit _unitsType, uint _unitsCount) {
             unitsType = _unitsType;
             if (_unitsCount > MAXSIZE) {
@@ -71,14 +71,14 @@ namespace game {
         public uint Damage(uint damageHP) {
             uint oldHP = totalHitPoints;
             totalHitPoints = ((int)totalHitPoints-(int)damageHP > 0) ? (totalHitPoints - damageHP) : 0;
-            ConsoleUI.PrintLine($"{unitsType.type} got {oldHP-totalHitPoints} damage");
+            Console.WriteLine($"{unitsType.type} got {oldHP-totalHitPoints} damage");
             return oldHP-totalHitPoints;
         }
 
         public uint Heal(uint healHP) {
             uint oldHP = totalHitPoints;
             totalHitPoints = (totalHitPoints + healHP < initHitPoints) ? totalHitPoints + healHP : initHitPoints;
-            ConsoleUI.PrintLine($"{unitsType.type} healed {oldHP-totalHitPoints} hp");
+            Console.WriteLine($"{unitsType.type} healed {oldHP-totalHitPoints} hp");
             return totalHitPoints - oldHP;
         }
 
@@ -210,15 +210,15 @@ namespace game {
             GetLastEffect()?.NewRound();
         }
 
-        public List<ModifierType> GetModifiers() {
-            var result = new List<ModifierType>();
+        public List<string> GetModifiers() {
+            var result = new List<string>();
             foreach (var mod in Modifiers.Keys) {
                 result.Add(((IModifier)mod).type);
             }
             return result;
         }
-        public List<EffectType> GetEffects() {
-            var result = new List<EffectType>();
+        public List<string> GetEffects() {
+            var result = new List<string>();
             foreach (var mod in Effects.Keys) {
                 result.Add(((BaseEffect)mod).type);
             }

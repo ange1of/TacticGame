@@ -1,26 +1,26 @@
 using System;
 
 namespace game {
-    interface ICast {
+    public interface ICast {
         ICast Clone();
-        CastType type { get; }
+        string type { get; }
         bool hasBeenCasted { get; }
     }
 
-    interface ISingleCast : ICast {
+    public interface ISingleCast : ICast {
         void Cast(BattleUnitsStack caster, BattleUnitsStack target);
     }
 
-    interface IFriendCast : ICast {}
+    public interface IFriendCast : ICast {}
 
-    interface IEnemyCast : ICast {}
+    public interface IEnemyCast : ICast {}
  
-    enum CastType {
-        Curse,
-        PunishingStrike,
-        Weakening,
-        Acceleration,
-        Resurrection
-    }
+    // enum CastType {
+    //     Curse,
+    //     PunishingStrike,
+    //     Weakening,
+    //     Acceleration,
+    //     Resurrection
+    // }
 
 }

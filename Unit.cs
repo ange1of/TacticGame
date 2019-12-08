@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace game {
 
-    class Unit {
+    public class Unit {
 
         public Unit(string _type, uint _hitPoints, uint _attack, int _defence, 
         (uint minDamage, uint maxDamage) _damage, double _initiative, IEnumerable<BaseEffect> _effects, IEnumerable<ICast> _casts) {

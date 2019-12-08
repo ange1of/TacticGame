@@ -2,7 +2,7 @@ using System;
 
 namespace game {
 
-    static class Action {
+    public static class Action {
         public static void Attack(BattleUnitsStack attackingStack, BattleUnitsStack defendingStack) {
             attackingStack.state = State.MadeMove;
 

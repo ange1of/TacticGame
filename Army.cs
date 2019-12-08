@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace game {
 
-    class Army {
+    public class Army {
         public Army(IEnumerable<UnitsStack> otherUnitsStackList) {
             foreach (UnitsStack currentStack in otherUnitsStackList) {
                 if (_unitsStackList.Count == MAXSIZE) {

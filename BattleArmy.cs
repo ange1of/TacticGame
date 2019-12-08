@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace game {
 
-    class BattleArmy {
+    public class BattleArmy {
         public BattleArmy(IEnumerable<BattleUnitsStack> otherUnitsStackList) {
             foreach (BattleUnitsStack currentStack in otherUnitsStackList) {
                 if (_unitsStackList.Count == MAXSIZE) {

@@ -3,25 +3,14 @@ using System.Collections.Generic;
 
 namespace game {
     static class ConsoleUI {
-        public static void Print(string str) {
-            Console.Write(str);
-        }
 
-        public static void PrintLine(string str) {
-            Console.WriteLine(str);
-        }
-
-        public static void PrintBlock(string str) {
-            Console.WriteLine($"\n{str}\n");
-        }
-
-        public static void PrintList(string prefix, params string[] arr) {
+        public static void PrintList(string prefix="", params string[] arr) {
             foreach (string elem in arr) {
                 Console.WriteLine($"{prefix}{elem}");
             }
         }
 
-        public static void PrintList(string prefix, IEnumerable<object> arr) {
+        public static void PrintList(IEnumerable<object> arr, string prefix="") {
             foreach (var elem in arr) {
                 Console.WriteLine($"{prefix}{elem.ToString()}");
             }
@@ -32,10 +21,6 @@ namespace game {
             foreach (string elem in arr) {
                 Console.WriteLine($"{i++}: {elem}");
             }
-        }
-
-        public static string GetOption() {
-            return Console.ReadLine();
         }
 
         public static int GetNumericOption(int minValue, int maxValue) {

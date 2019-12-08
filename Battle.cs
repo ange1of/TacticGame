@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace game {
 
-    class Battle {
+    public class Battle {
         public Battle(Player _firstPlayer, Player _secondPlayer) {
             firstPlayer = _firstPlayer;
             secondPlayer = _secondPlayer;
@@ -19,18 +19,18 @@ namespace game {
             roundNumber = 0;
             winner = null;
             while (winner == null) {
-                ConsoleUI.PrintLine($"ROUND {++roundNumber}");
+                Console.WriteLine($"ROUND {++roundNumber}");
                 while (intitativeScale.NextStack() != null) {
-                    ConsoleUI.PrintLine($"{firstPlayer.nickname}'s army:");
-                    ConsoleUI.PrintList("\t", firstPlayerArmy.unitsStackList);
+                    Console.WriteLine($"{firstPlayer.nickname}'s army:");
+                    ConsoleUI.PrintList(firstPlayerArmy.unitsStackList, "\t");
                     
-                    ConsoleUI.Print("\n");
+                    Console.Write("\n");
 
-                    ConsoleUI.PrintLine($"{secondPlayer.nickname}'s army:");
-                    ConsoleUI.PrintList("\t", secondPlayerArmy.unitsStackList);
+                    Console.WriteLine($"{secondPlayer.nickname}'s army:");
+                    ConsoleUI.PrintList(secondPlayerArmy.unitsStackList, "\t");
 
-                    ConsoleUI.Print("\n");
-                    ConsoleUI.PrintBlock(PrintScale());
+                    Console.Write("\n");
+                    Console.WriteLine(PrintScale());
 
                     NextTurn(intitativeScale.NextStack());
                     if (winner != null) {
@@ -53,13 +53,13 @@ namespace game {
         private void NextTurn(BattleUnitsStack stack) {
             List<ICast> possibleCasts = stack.Casts.Where(c => !c.hasBeenCasted).ToList();
 
-            ConsoleUI.PrintLine($"Turn of {(intitativeScale.NextStack().parentArmy == firstPlayerArmy ? firstPlayer.nickname : secondPlayer.nickname)}'s {intitativeScale.NextStack().unitsType.type}");
+            Console.WriteLine($"Turn of {(intitativeScale.NextStack().parentArmy == firstPlayerArmy ? firstPlayer.nickname : secondPlayer.nickname)}'s {intitativeScale.NextStack().unitsType.type}");
 
             if (possibleCasts.Count > 0) {
-                ConsoleUI.PrintLine($"({string.Join(", ", possibleCasts.Select(x => x.type))})");
+                Console.WriteLine($"({string.Join(", ", possibleCasts.Select(x => x.type))})");
             }
 
-            ConsoleUI.PrintLine("Possibe actions:");
+            Console.WriteLine("Possibe actions:");
 
             if (stack.state == State.NotMadeMove) {
 
@@ -69,7 +69,7 @@ namespace game {
 
                 if (possibleCasts.Count == 0) {
                     while (chosenAction == 2) {
-                        ConsoleUI.PrintLine("No possible casts to use");
+                        Console.WriteLine("No possible casts to use");
                         chosenAction = ConsoleUI.GetNumericOption(1, 5);
                     }
                 }
@@ -81,7 +81,7 @@ namespace game {
                 int chosenCast = 0;
                 switch (chosenAction) {
                     case 1:
-                        ConsoleUI.PrintLine("Possible targets:");
+                        Console.WriteLine("Possible targets:");
                         if (stack.parentArmy == firstPlayerArmy) {
                             opponentArmy = secondPlayerArmy;
                         }
@@ -92,12 +92,12 @@ namespace game {
                         targets = new List<BattleUnitsStack>();
                         foreach (var target in opponentArmy.unitsStackList) {
                             if (target.unitsCount > 0) {
-                                ConsoleUI.PrintLine($"{++index} - {target}");
+                                Console.WriteLine($"{++index} - {target}");
                                 targets.Add(target);
                             }
                         }
 
-                        ConsoleUI.PrintLine("Choose the target:");
+                        Console.WriteLine("Choose the target:");
                         chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
                         Action.Attack(stack, targets[chosenTarget-1]);
@@ -105,7 +105,7 @@ namespace game {
                     case 2:
                         index = 0;
                         foreach (var cast in possibleCasts) {
-                            ConsoleUI.PrintLine($"{++index} - {cast.type}");
+                            Console.WriteLine($"{++index} - {cast.type}");
                         }
                         chosenCast = ConsoleUI.GetNumericOption(1, index);
                         
@@ -125,15 +125,15 @@ namespace game {
 
                         index = 0;
                         targets = new List<BattleUnitsStack>();
-                        ConsoleUI.PrintLine("Possible targets:");
+                        Console.WriteLine("Possible targets:");
                         foreach (var target in targetArmy.unitsStackList) {
                             if ((target.unitsCount > 0 && !(concreteCast is CResurrection)) || (concreteCast is CResurrection && target.ressurectable)) {
-                                ConsoleUI.PrintLine($"{++index} - {target}");
+                                Console.WriteLine($"{++index} - {target}");
                                 targets.Add(target);
                             }
                         }
 
-                        ConsoleUI.PrintLine("Choose the target:");
+                        Console.WriteLine("Choose the target:");
                         chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
                         Action.Cast(concreteCast, stack, targets[chosenTarget-1]);
@@ -158,7 +158,7 @@ namespace game {
                 
                 if (possibleCasts.Count == 0) {
                     while (chosenAction == 2) {
-                        ConsoleUI.PrintLine("No possible casts to use");
+                        Console.WriteLine("No possible casts to use");
                         chosenAction = ConsoleUI.GetNumericOption(1, 4);
                     }
                 }
@@ -170,7 +170,7 @@ namespace game {
                 int chosenCast = 0;
                 switch (chosenAction) {
                     case 1:
-                        ConsoleUI.PrintLine("Possible targets:");
+                        Console.WriteLine("Possible targets:");
                         if (stack.parentArmy == firstPlayerArmy) {
                             opponentArmy = secondPlayerArmy;
                         }
@@ -181,12 +181,12 @@ namespace game {
                         targets = new List<BattleUnitsStack>();
                         foreach (var target in opponentArmy.unitsStackList) {
                             if (target.unitsCount > 0) {
-                                ConsoleUI.PrintLine($"{++index} - {target}");
+                                Console.WriteLine($"{++index} - {target}");
                                 targets.Add(target);
                             }
                         }
 
-                        ConsoleUI.PrintLine("Choose the target:");
+                        Console.WriteLine("Choose the target:");
                         chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
                         Action.Attack(stack, targets[chosenTarget-1]);
@@ -194,7 +194,7 @@ namespace game {
                     case 2:
                         index = 0;
                         foreach (var cast in possibleCasts) {
-                            ConsoleUI.PrintLine($"{++index} - {cast.type}");
+                            Console.WriteLine($"{++index} - {cast.type}");
                         }
                         chosenCast = ConsoleUI.GetNumericOption(1, index);
                         
@@ -214,15 +214,15 @@ namespace game {
 
                         index = 0;
                         targets = new List<BattleUnitsStack>();
-                        ConsoleUI.PrintLine("Possible targets:");
+                        Console.WriteLine("Possible targets:");
                         foreach (var target in targetArmy.unitsStackList) {
                             if ((target.unitsCount > 0 && !(concreteCast is CResurrection)) || (concreteCast is CResurrection && target.ressurectable)) {
-                                ConsoleUI.PrintLine($"{++index} - {target}");
+                                Console.WriteLine($"{++index} - {target}");
                                 targets.Add(target);
                             }
                         }
 
-                        ConsoleUI.PrintLine("Choose the target:");
+                        Console.WriteLine("Choose the target:");
                         chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
                         Action.Cast(concreteCast, stack, targets[chosenTarget-1]);
@@ -261,14 +261,15 @@ namespace game {
 
         private void End() {
             if (winner == firstPlayerArmy) {
-                ConsoleUI.PrintLine($"Player {firstPlayer.nickname} WINS!");
+                Console.WriteLine($"Player {firstPlayer.nickname} WINS!");
             }
             else {
-                ConsoleUI.PrintLine($"Player {secondPlayer.nickname} WINS!");
+                Console.WriteLine($"Player {secondPlayer.nickname} WINS!");
             }
-            ConsoleUI.PrintLine($"Armies:\n" +
-            $"{firstPlayer.nickname}: {string.Join(", ", firstPlayerArmy.unitsStackList)}" + "\n" + 
-            $"{secondPlayer.nickname}: {string.Join(", ", secondPlayerArmy.unitsStackList)}");
+            Console.WriteLine($"Armies:\n\t{firstPlayer.nickname}:");
+            ConsoleUI.PrintList(firstPlayerArmy.unitsStackList.Select(x => $"{x.unitsType.type}: {x.unitsCount}"), "\t\t");
+            Console.WriteLine($"\t{secondPlayer.nickname}: ");
+            ConsoleUI.PrintList(secondPlayerArmy.unitsStackList.Select(x => $"{x.unitsType.type}: {x.unitsCount}"), "\t\t");
 
             firstPlayer.UpdateArmy(firstPlayerArmy);
             secondPlayer.UpdateArmy(secondPlayerArmy);
