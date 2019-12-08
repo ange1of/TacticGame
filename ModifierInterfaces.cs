@@ -31,12 +31,4 @@ namespace game {
         double ModifyInitiative(double initiative);
         double UnmodifyInitiative(double initiative);
     }
-
-    // enum ModifierType {
-    //     Defense,
-    //     Curse,
-    //     PunishingStrike,
-    //     Weakening,
-    //     Acceleration,
-    // }
 }

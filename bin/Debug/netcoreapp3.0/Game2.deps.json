@@ -10,7 +10,8 @@
         "dependencies": {
           "Microsoft.Extensions.Configuration": "3.0.0",
           "Microsoft.Extensions.Configuration.Json": "3.0.0",
-          "OptimizedPriorityQueue": "4.2.0"
+          "OptimizedPriorityQueue": "4.2.0",
+          "BaseEntities": "1.0.0.0"
         },
         "runtime": {
           "Game2.dll": {}
@@ -108,6 +109,14 @@
             "fileVersion": "4.2.0.0"
           }
         }
+      },
+      "BaseEntities/1.0.0.0": {
+        "runtime": {
+          "BaseEntities.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -179,6 +188,11 @@
       "sha512": "sha512-/Sr/OfCFnff7zFe6HoDyWRU8pEvJbOCE9ZjFCSH0EcfETjgvZJ2kUoqlTgVR7cgTPexOGhNATdBKQigqbYn43w==",
       "path": "optimizedpriorityqueue/4.2.0",
       "hashPath": "optimizedpriorityqueue.4.2.0.nupkg.sha512"
+    },
+    "BaseEntities/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

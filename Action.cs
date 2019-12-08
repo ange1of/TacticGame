@@ -1,4 +1,5 @@
 using System;
+using BaseEntities;
 
 namespace game {
 

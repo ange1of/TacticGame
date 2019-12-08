@@ -7,5 +7,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0"/>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0"/>
     <PackageReference Include="OptimizedPriorityQueue" Version="*"/>
+
+    <Reference Include="BaseEntities">
+      <HintPath>C:\Users\Xiaomi\Documents\OOP\BaseEntities\bin\Debug\netcoreapp3.0\BaseEntities.dll</HintPath>
+      <!-- <HintPath>./BaseEntities.dll</HintPath> -->
+    </Reference>
+
   </ItemGroup>
 </Project>

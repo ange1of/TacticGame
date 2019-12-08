@@ -1,12 +1,7 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
-using System.Collections.Generic;
-using Priority_Queue;
-using System.Linq;
-using System.Collections.Specialized;
-using System.Text.Json;
+using BaseEntities;
 using System.IO;
+using System.Reflection;
 
 namespace game
 {
@@ -20,23 +15,16 @@ namespace game
             // var p1 = new Player(firstArmy, "Ovosh");
             // var p2 = new Player(secondArmy, "Frukt");
             // var battle = new Battle(p1, p2);
-            // battle.Start();
-
-            // string unitFilesPath = Path.Join(Environment.CurrentDirectory, @"Units\");
-            // if (Directory.Exists(unitFilesPath)) {
-            //     var a = Directory.EnumerateFiles(unitFilesPath, "*.cs");
-            //     Console.WriteLine(string.Join("\n", a));
+            // battle.Start(); 
+            // foreach (var type in ModHandler.GetAllUnits()) {
+            //     Console.WriteLine(type.Name);
             // }
-            // else {
-            //     Console.WriteLine("NOPE");
+            // Console.WriteLine(Directory.Exists(Path.Join(Environment.CurrentDirectory, Config.GetValue("ModsPath"))));
+            // string path = Path.Join(Environment.CurrentDirectory, Config.GetValue("BaseEntitiesPath"));
+            // foreach (var t in Assembly.LoadFile(path).GetTypes()) {
+            //     Console.WriteLine(t);
             // }
-            
-            // string path = Path.Join(Environment.CurrentDirectory, @"Units\");
-            foreach (var t in typeof(Unit).Assembly.GetTypes()) {
-                if (t.IsSubclassOf(typeof(Unit))) {
-                    Console.WriteLine(t.Name);
-                }
-            }
+            var g = new Game();
         }
     }
 }

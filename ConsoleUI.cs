@@ -23,6 +23,13 @@ namespace game {
             }
         }
 
+        public static void PrintNumericList(int startNum, IEnumerable<string> arr) {
+            int i = startNum;
+            foreach (string elem in arr) {
+                Console.WriteLine($"{i++}: {elem}");
+            }
+        }
+
         public static int GetNumericOption(int minValue, int maxValue) {
             int chosenAction;
             int.TryParse(Console.ReadLine(), out chosenAction);

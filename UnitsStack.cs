@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace game  {
 
@@ -23,7 +25,7 @@ namespace game  {
         }
 
         public override string ToString() {
-            return $"{{\"{unitsType.type}\": {unitsCount}}}";
+            return $"{unitsType.type}: {unitsCount} E({string.Join(", ", unitsType.Effects.Select(x => x.type))}) C({string.Join(", ", unitsType.Casts.Select(x => x.type))})";
         }
 
         public Unit unitsType { get; }
