@@ -5,6 +5,7 @@ namespace game {
         ICast Clone();
         string type { get; }
         bool hasBeenCasted { get; }
+        bool Applicable(BattleUnitsStack stack);
     }
 
     public interface ISingleCast : ICast {
@@ -14,13 +15,5 @@ namespace game {
     public interface IFriendCast : ICast {}
 
     public interface IEnemyCast : ICast {}
- 
-    // enum CastType {
-    //     Curse,
-    //     PunishingStrike,
-    //     Weakening,
-    //     Acceleration,
-    //     Resurrection
-    // }
-
+    
 }

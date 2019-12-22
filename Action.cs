@@ -64,6 +64,10 @@ namespace game {
             foreach (var target in targets) {
                 target.GetLastEffect()?.AfterCast(cast, caster, targets);
             }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{cast.type} casted!");
+            Console.ResetColor();
         }
 
         public static void Wait(BattleUnitsStack waitingStack) {

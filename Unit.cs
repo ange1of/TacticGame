@@ -23,7 +23,7 @@ namespace game {
         }
 
         public override string ToString() {
-            return $"{{\"type\": \"{type}\", \"hitPoints\": {hitPoints}, \"attack\": {attack}, \"defence\": {defence}, \"damage\": {{\"minDamage\": {damage.minDamage}, \"maxDamage\": {damage.maxDamage}}}, \"initiative\": {initiative}}}";
+            return $"Type: {type}\nHit Points: {hitPoints}\nAttack: {attack}\nDefence: {defence}\nDamage:\n\tMin Damage: {damage.minDamage}\n\tMax Damage: {damage.maxDamage}\nInitiative: {initiative}\n\nEffects:\n\t{string.Join("\n\t", Effects.Select(x => x.type))}\nCasts:\n\t{string.Join("\n\t", Casts.Select(x => x.type))}";
         }
 
         public string type { get; }

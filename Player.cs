@@ -7,6 +7,11 @@ using System.Linq;
 namespace game {
 
     public class Player {
+        public Player() {
+            army = new Army();
+            nickname = "";
+        }
+
         public Player(string _nickname) {
             army = new Army();
             nickname = _nickname;
@@ -23,6 +28,10 @@ namespace game {
 
         public void UpdateArmy(BattleArmy battleArmy) {
             army = new Army(battleArmy);
+        }
+
+        public void SetNickname(string newNickname) {
+            nickname = newNickname;
         }
 
         public void MakeNewArmy() {
@@ -57,7 +66,7 @@ namespace game {
             ConsoleUI.PrintList(army.unitsStackList, "\t");
         }
 
-        public string nickname { get; }
+        public string nickname { get; private set; }
         public Army army { get; private set; }
     }
 

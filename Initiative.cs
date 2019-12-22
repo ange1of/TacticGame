@@ -5,7 +5,7 @@ using Priority_Queue;
 
 namespace game {
 
-    class Initiative {
+    public class Initiative {
         public Initiative(BattleArmy _firstArmy, BattleArmy _secondArmy) {
             firstArmy = _firstArmy;
             secondArmy = _secondArmy;
