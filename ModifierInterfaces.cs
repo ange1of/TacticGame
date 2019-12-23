@@ -5,6 +5,7 @@ namespace game {
     public interface IModifier {
         string type { get; }
         string ToString();
+        string description { get; }
     }
 
     public interface IDamageModifier : IModifier {

@@ -18,7 +18,7 @@ namespace game {
                 return new FirstPlayerInterface(firstPlayer, secondPlayer, this);
             }
             else {
-                return null;
+                return new HelpInterface(this);
             }
         }
 

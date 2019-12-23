@@ -32,7 +32,7 @@ namespace game {
             int chosenTarget = ConsoleUI.GetNumericOption(1, index);
 
             Action.Attack(stack, targets[chosenTarget-1]);
-            ConsoleUI.NewScreen(1000);
+            ConsoleUI.NewScreen(1800);
             return 0;
         }
 

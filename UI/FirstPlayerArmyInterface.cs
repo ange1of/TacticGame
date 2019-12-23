@@ -15,8 +15,12 @@ namespace game {
             ConsoleUI.NewScreen();
             Console.WriteLine($"{firstPlayer.nickname}'s army:");
             ConsoleUI.PrintList(firstPlayer.army.unitsStackList, "\t");
-
-            if (firstPlayer.army.unitsStackList.Count < int.Parse(Config.GetValue("Army:MAXSIZE"))) {
+            if (firstPlayer.army.unitsStackList.Count == 0) {
+                ConsoleUI.PrintNumericList(1, "Add stack", "Back");
+                int option = ConsoleUI.GetNumericOption(1, 2);
+                return (option > 1) ? option + 3 : option;
+            } 
+            else if (firstPlayer.army.unitsStackList.Count < int.Parse(Config.GetValue("Army:MAXSIZE"))) {
                 ConsoleUI.PrintNumericList(1, "Add stack", "Delete stack", "Complete creation", "Clear army", "Back");
                 return ConsoleUI.GetNumericOption(1, 5);
             }

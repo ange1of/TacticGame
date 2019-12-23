@@ -6,6 +6,7 @@ namespace game {
         string type { get; }
         bool hasBeenCasted { get; }
         bool Applicable(BattleUnitsStack stack);
+        string description { get; }
     }
 
     public interface ISingleCast : ICast {

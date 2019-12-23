@@ -32,13 +32,16 @@ namespace game {
 
             Console.WriteLine($"{battle.firstPlayer.nickname}'s army:");
             ConsoleUI.PrintList(battle.firstPlayerArmy.unitsStackList, "\t");
-            Console.Write("\n");
+            Console.WriteLine();
             Console.WriteLine($"{battle.secondPlayer.nickname}'s army:");
             ConsoleUI.PrintList(battle.secondPlayerArmy.unitsStackList, "\t");
-            Console.Write("\n");
+            Console.WriteLine();
             Console.WriteLine(battle.PrintScale());
+            Console.WriteLine();
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Turn of {(battle.intitativeScale.NextStack().parentArmy == battle.firstPlayerArmy ? battle.firstPlayer.nickname : battle.secondPlayer.nickname)}'s {battle.intitativeScale.NextStack().unitsType.type}");
+            Console.ResetColor();
 
             List<ICast> possibleCasts = battle.intitativeScale.NextStack()?.Casts.Where(c => !c.hasBeenCasted).ToList();
             if (possibleCasts.Count > 0) {

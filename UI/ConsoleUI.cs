@@ -5,7 +5,7 @@ using System.Threading;
 namespace game {
     static class ConsoleUI {
 
-        public static void NewScreen(int sleepTime = 500) {
+        public static void NewScreen(int sleepTime = 0) {
             Thread.Sleep(sleepTime);
             Console.Clear();
         }
